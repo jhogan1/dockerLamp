@@ -1,0 +1,21 @@
+<VirtualHost *:443>
+  ServerAdmin dev@lampmaster.com
+  ServerName local-web.lampmaster.com
+  DocumentRoot /var/www/html/local-web
+  <Directory /var/www/html/local-web>
+    Require all granted
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^/index\.php$ - [L,NC]
+    RewriteCond %{REQUEST_URI} !\.(png|jpg|gif|jpeg|bmp|svg|ico)$
+    RewriteCond %{REQUEST_URI} !\.(css|js|ttf|woff|woff2|eot)$
+    RewriteRule . index.php [L]
+  </Directory>
+
+  ErrorLog /var/log/apache2/local-web.lampmaster.com-error.log
+  CustomLog /var/log/apache2/local-web.lampmaster.com-access.log common
+
+  SSLEngine on
+  SSLCertificateFile /etc/apache2/ssl/local-web.lampmaster.com.crt
+  SSLCertificateKeyFile /etc/apache2/ssl/local-web.lampmaster.com.key
+</VirtualHost>

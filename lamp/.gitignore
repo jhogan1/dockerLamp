@@ -1,0 +1,4 @@
+.idea
+.swp
+.env
+./etc/ssl_certs/*.pem

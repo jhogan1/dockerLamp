@@ -1,0 +1,58 @@
+version: "3"
+services:
+  lamp-php-apache:
+    platform: linux/arm64
+    container_name: "lamp-php-apache"
+    build:
+      context: ./
+      dockerfile: ./etc/php-apache/Dockerfile
+    restart: "unless-stopped"
+    environment:
+      - VIRTUAL_PROTO=https
+      - VIRTUAL_HOST=local-web.lampmaster.com
+      - VIRTUAL_PORT=443
+    volumes:
+      - ./local-web:/var/www/html/local-web
+      - ./storage/logs/apache2:/var/log/apache2
+      - ./etc/php-apache/php:/usr/local/etc/php
+    networks:
+      lamp_lamp:
+        aliases:
+          - local-web.lampmaster.com
+    depends_on:
+      - lamp-db
+      - lamp-redis
+  lamp-db:
+    platform: linux/arm64
+    container_name: "lamp-db"
+    build:
+      context: ./
+      dockerfile: ./etc/mysql/Dockerfile
+    restart: "unless-stopped"
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./etc/mysql/data:/var/lib/mysql
+      - ./etc/mysql/conf:/usr/local/etc
+      - ./etc/mysql/init_sql:/docker-entrypoint-initdb.d
+    networks:
+      lamp_lamp:
+  lamp-redis:
+    platform: linux/arm
+    container_name: "lamp-redis"
+    restart: "unless-stopped"
+    build:
+      context: ./
+      dockerfile: ./etc/redis/Dockerfile
+    volumes:
+      - ./etc/redis/data:/data
+      - type: volume
+        source: lamp-redis
+        target: /data
+    networks:
+      lamp_lamp:
+volumes:
+  lamp-redis:
+networks:
+    lamp_lamp:
+      external: true

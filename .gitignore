@@ -1,0 +1,15 @@
+.idea
+.swp
+.vscode
+.DS_Store
+/storage/logs/
+/etc/php-apache/php/php.ini
+/etc/php-apache/php/conf.d/xdebug.ini
+/etc/php-apache/apache2/vhosts/sites-enabled/*.conf
+/etc/php-apache/apache2/conf/apache2.conf
+/etc/redis/conf/redis.conf
+/etc/mysql/conf/my.cnf
+/etc/php-apache/apache2/ssl_certs
+/etc/redis/data
+/etc/mysql/data
+/lamp/etc/ssl
